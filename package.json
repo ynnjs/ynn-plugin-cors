@@ -1,0 +1,30 @@
+{
+  "name": "ynn-plugin-cors",
+  "version": "0.0.0",
+  "description": "Cors Origin Resources Sharing plugin for Ynn",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "jest --forceExit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ynnjs/ynn-plugin-cors.git"
+  },
+  "keywords": [
+    "ynn",
+    "plugin",
+    "cors",
+    "koa",
+    "cross-origin"
+  ],
+  "author": "LvChengbin <lvchengbin59@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ynnjs/ynn-plugin-cors/issues"
+  },
+  "homepage": "https://github.com/ynnjs/ynn-plugin-cors#readme",
+  "devDependencies": {},
+  "dependencies": {
+    "ynn": "0.0.12"
+  }
+}
