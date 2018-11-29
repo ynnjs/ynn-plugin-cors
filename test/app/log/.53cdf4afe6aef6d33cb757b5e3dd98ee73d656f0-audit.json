@@ -1,0 +1,14 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 30
+    },
+    "auditLog": "/Users/NextSeason/workspace/projects/ynn/plugin-cors/test/app/log/.53cdf4afe6aef6d33cb757b5e3dd98ee73d656f0-audit.json",
+    "files": [
+        {
+            "date": 1542052467050,
+            "name": "/Users/NextSeason/workspace/projects/ynn/plugin-cors/test/app/log/2018-11-13.log",
+            "hash": "b073d1f3d6c92adc0f4965131b347a43"
+        }
+    ]
+}
