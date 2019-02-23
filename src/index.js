@@ -1,11 +1,23 @@
 const url = require( 'url' );
+const vary = require( 'vary' );
 const is = require( '@lvchengbin/is' );
 
 module.exports = ( app, options ) => {
     app.preuse( ( ctx, next ) => {
         const whitelist = options.whitelist || app.config( 'cors.whitelist' );
+        const headers = options.headers || [];
         const origin = ctx.request.get( 'origin' );
         if( !whitelist ) return next();
+
+        /**
+         * for storing headers set for cors
+         */
+        const headerSet = {};
+
+        function set( k, v ) {
+            ctx.set( k, v );
+            headerSet[ k ] = v;
+        }
 
         ctx.vary( 'Origin' );
 
@@ -43,10 +55,10 @@ module.exports = ( app, options ) => {
 
         if( !matched ) return next();
 
-        ctx.set( 'Access-Control-Allow-Origin', origin );
+        set( 'Access-Control-Allow-Origin', origin );
 
         if( matched.credentials ) {
-            ctx.set( 'Access-Control-Allow-Credentials', 'true' );
+            set( 'Access-Control-Allow-Credentials', 'true' );
         }
 
         if( ctx.method === 'OPTIONS' ) {
@@ -61,28 +73,33 @@ module.exports = ( app, options ) => {
 
 
             if( matched.headers ) {
-                ctx.set( 'Access-Control-Allow-Headers', matched.headers.join( ',' ) );
+                set( 'Access-Control-Allow-Headers', [ ...headers, ...matched.headers ].join( ',' ) );
             }
 
             if( matched.methods ) {
-                ctx.set( 'Access-Control-Allow-Methods', matched.methods.join( ',' ).toUpperCase() );
+                set( 'Access-Control-Allow-Methods', matched.methods.join( ',' ).toUpperCase() );
             }
 
             if( matched.maxAge ) {
-                ctx.set( 'Access-Control-Max-Age', matched.maxAge );
+                set( 'Access-Control-Max-Age', matched.maxAge );
             }
 
             ctx.status = 204; 
         } else {
 
             if( matched.credentials ) {
-                ctx.set( 'Access-Control-Allow-Credentials', 'true' );
+                set( 'Access-Control-Allow-Credentials', 'true' );
             }
 
             if( matched.exposeHeaders ) {
-                ctx.set( 'Access-Control-Expose-Headers', matched.exposeHeaders.join( ',' ) );
+                set( 'Access-Control-Expose-Headers', matched.exposeHeaders.join( ',' ) );
             }
-            return next();
+            return next().catch( e => {
+                if( !e.headers ) e.headers = {};
+                const varyWithOrigin = vary.append( e.headers.vary || e.headers.Vary || '', 'Origin' );
+                Object.assign( e.headers, headerSet, { vary : varyWithOrigin } );
+                throw e;
+            } );
         }
     } );
 }
