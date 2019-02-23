@@ -97,6 +97,7 @@ module.exports = ( app, options ) => {
             return next().catch( e => {
                 if( !e.headers ) e.headers = {};
                 const varyWithOrigin = vary.append( e.headers.vary || e.headers.Vary || '', 'Origin' );
+                delete e.headers.Vary;
                 Object.assign( e.headers, headerSet, { vary : varyWithOrigin } );
                 throw e;
             } );
