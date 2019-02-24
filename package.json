@@ -24,15 +24,15 @@
   },
   "homepage": "https://github.com/ynnjs/ynn-plugin-cors#readme",
   "devDependencies": {
-    "eslint": "^5.9.0",
+    "eslint": "^5.14.1",
     "jest": "^24.1.0",
-    "nodemon": "^1.18.7",
+    "nodemon": "^1.18.10",
     "pre-commit": "^1.2.2",
-    "supertest": "^3.3.0"
+    "supertest": "^3.4.2",
+    "ynn": "0.0.36"
   },
   "dependencies": {
-    "@lvchengbin/is": "0.0.26",
-    "vary": "^1.1.2",
-    "ynn": "0.0.29"
+    "@lvchengbin/is": "0.0.27",
+    "vary": "^1.1.2"
   }
 }
