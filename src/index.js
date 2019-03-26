@@ -71,9 +71,14 @@ module.exports = ( app, options ) => {
                 return next();
             }
 
+            const hds = [ ...headers ];
 
             if( matched.headers ) {
-                set( 'Access-Control-Allow-Headers', [ ...headers, ...matched.headers ].join( ',' ) );
+                hds.push( ...matched.headers );
+            }
+
+            if( hds.length ) {
+                set( 'Access-Control-Allow-Headers', hds.join( ',' ) );
             }
 
             if( matched.methods ) {
