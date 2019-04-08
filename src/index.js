@@ -2,7 +2,7 @@ const url = require( 'url' );
 const vary = require( 'vary' );
 const is = require( '@lvchengbin/is' );
 
-module.exports = ( app, options ) => {
+module.exports = ( app, options = {} ) => {
     app.preuse( ( ctx, next ) => {
         const whitelist = options.whitelist || app.config( 'cors.whitelist' );
         const headers = options.headers || [];
@@ -71,14 +71,18 @@ module.exports = ( app, options ) => {
                 return next();
             }
 
-            const hds = [ ...headers ];
+            if( options.allowAllHeaders !== false ) {
+                set( 'Access-Control-Allow-Headers', Object.keys( ctx.headers ).join( ',' ) );
+            } else {
+                const hds = [ ...headers ];
 
-            if( matched.headers ) {
-                hds.push( ...matched.headers );
-            }
+                if( matched.headers ) {
+                    hds.push( ...matched.headers );
+                }
 
-            if( hds.length ) {
-                set( 'Access-Control-Allow-Headers', hds.join( ',' ) );
+                if( hds.length ) {
+                    set( 'Access-Control-Allow-Headers', hds.join( ',' ) );
+                }
             }
 
             if( matched.methods ) {
@@ -99,6 +103,9 @@ module.exports = ( app, options ) => {
             if( matched.exposeHeaders ) {
                 set( 'Access-Control-Expose-Headers', matched.exposeHeaders.join( ',' ) );
             }
+            /**
+             * still to add headers even though the request failed.
+             */
             return next().catch( e => {
                 if( !e.headers ) e.headers = {};
                 const varyWithOrigin = vary.append( e.headers.vary || e.headers.Vary || '', 'Origin' );
