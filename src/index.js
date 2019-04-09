@@ -71,19 +71,21 @@ module.exports = ( app, options = {} ) => {
                 return next();
             }
 
+            /*
             if( options.allowAllHeaders !== false ) {
                 set( 'Access-Control-Allow-Headers', Object.keys( ctx.headers ).join( ',' ) );
             } else {
-                const hds = [ ...headers ];
+            */
+            const hds = [ ...headers ];
 
-                if( matched.headers ) {
-                    hds.push( ...matched.headers );
-                }
-
-                if( hds.length ) {
-                    set( 'Access-Control-Allow-Headers', hds.join( ',' ) );
-                }
+            if( matched.headers ) {
+                hds.push( ...matched.headers );
             }
+
+            if( hds.length ) {
+                set( 'Access-Control-Allow-Headers', hds.join( ',' ) );
+            }
+            //}
 
             if( matched.methods ) {
                 set( 'Access-Control-Allow-Methods', matched.methods.join( ',' ).toUpperCase() );
